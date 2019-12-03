@@ -22,7 +22,16 @@ class App extends Component {
     let selection = this.state.comFile.data.filter((item) => {
       return parseFloat(item[1]) === parseFloat(this.state.agn) && parseFloat(item[2]) === parseFloat(this.state.z) && parseFloat(item[3]) === parseFloat(this.state.n) && parseFloat(item[4]) === parseFloat(this.state.r) && parseFloat(item[5]) === parseFloat(this.state.nh)
     })
-    this.setState({...this.state, selection: selection})
+    this.setState({...this.state, selection: selection[0]})
+    console.log("p")
+  }
+
+  renderLines = () => {
+    if(this.state.selection) {
+      return <div>{this.state.selection}</div>
+    } else {
+      return null
+    }
   }
 
   handleChange = (e) => {
@@ -70,6 +79,7 @@ class App extends Component {
         <Grid.Column textAlign='center'>
         <Header as='h3'>
       Top 50 Brightest lines
+      {this.renderLines()}
       </Header>
         </Grid.Column>
       </Grid>
