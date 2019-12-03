@@ -11,15 +11,18 @@ class App extends Component {
   state = {
     comFile: null,
     selection: null,
-    agn: "",
-    z: "",
-    n: "",
-    nh: "",
-    r: ""
+    agn: "10", // index 1
+    z: "1", // index 2
+    n: "300", // index 3
+    r: "21.6", // index 4
+    nh: "20" // index 5
   }
 
-  submitButton = () => {
-
+  handleClick = (e) => {
+    let selection = this.state.comFile.data.filter((item) => {
+      return parseFloat(item[1]) === parseFloat(this.state.agn) && parseFloat(item[2]) === parseFloat(this.state.z) && parseFloat(item[3]) === parseFloat(this.state.n) && parseFloat(item[4]) === parseFloat(this.state.r) && parseFloat(item[5]) === parseFloat(this.state.nh)
+    })
+    this.setState({...this.state, selection: selection})
   }
 
   handleChange = (e) => {
@@ -54,7 +57,7 @@ class App extends Component {
       <br/>
       <Input id='r' label='R' value={this.state.r} onChange={this.handleChange} placeholder='' style={{padding: "5px"}}/>
       <br/>
-      <Button style={{margin: "5px", width: "154px", height: "37px"}}>
+      <Button onClick={this.handleClick} style={{margin: "5px", width: "154px", height: "37px"}}>
       Submit
       </Button>
         </Grid.Column>
