@@ -9,13 +9,28 @@ import 'semantic-ui-css/semantic.min.css'
 
 class App extends Component {
 
-  componentDidMount() {
+  state = {
+    combineFile: null,
+    agn: "",
+    z: "",
+    n: "",
+    nh: "",
+    r: ""
+  }
 
+  componentDidMount() {
+    Papa.parse("combinedFile.csv", {
+	download: true,
+	complete: function(results) {
+    this.setState({...this.state, combineFile: results})
+		console.log(results.data[1]);
+	}
+});
   }
 
   render() {
     return (
-      <Grid container columns={3} divided relaxed stackable style={{"padding-top": "30px"}}>
+      <Grid container columns={3} divided relaxed stackable style={{"paddingTop": "30px"}}>
         <Grid.Column textAlign='center'>
         <Header as='h3' >
       Input Form
