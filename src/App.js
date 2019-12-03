@@ -11,7 +11,7 @@ function App() {
       <Grid.Column textAlign='center'>
       <Header as='h3' >
     Input Form
-    <a href='favicon.ico' download>Click to download</a>
+    <a href='data/grid000000000_Z_0p1_n_300_0per.con' download>Click to download</a>
     </Header>
     <Input label='AGN' placeholder='' style={{padding: "5px"}}/>
     <br/>
