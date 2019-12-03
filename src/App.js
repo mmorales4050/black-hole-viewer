@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Lines from './components/Lines'
 import Papa from 'papaparse';
 import './App.css';
 import { Button, Grid, Header, Input } from 'semantic-ui-react'
@@ -10,7 +11,7 @@ import 'semantic-ui-css/semantic.min.css'
 class App extends Component {
   state = {
     comFile: null,
-    selection: null,
+    selection: [],
     agn: "10", // index 1
     z: "1", // index 2
     n: "300", // index 3
@@ -24,14 +25,6 @@ class App extends Component {
     })
     this.setState({...this.state, selection: selection[0]})
     console.log("p")
-  }
-
-  renderLines = () => {
-    if(this.state.selection) {
-      return <div>{this.state.selection}</div>
-    } else {
-      return null
-    }
   }
 
   handleChange = (e) => {
@@ -79,7 +72,7 @@ class App extends Component {
         <Grid.Column textAlign='center'>
         <Header as='h3'>
       Top 50 Brightest lines
-      {this.renderLines()}
+      <Lines selection={this.state.selection}/>
       </Header>
         </Grid.Column>
       </Grid>
