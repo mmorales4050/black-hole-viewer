@@ -8,9 +8,9 @@ import 'semantic-ui-css/semantic.min.css'
 
 
 class App extends Component {
-
   state = {
-    combineFile: null,
+    comFile: null,
+    selection: null,
     agn: "",
     z: "",
     n: "",
@@ -18,14 +18,23 @@ class App extends Component {
     r: ""
   }
 
+  submitButton = () => {
+
+  }
+
+  handleChange = (e) => {
+    let newState = {...this.state}
+    newState[e.target.id] = e.target.value
+    this.setState(newState)
+  }
+
   componentDidMount() {
     Papa.parse("combinedFile.csv", {
 	download: true,
-	complete: function(results) {
-    this.setState({...this.state, combineFile: results})
-		console.log(results.data[1]);
-	}
-});
+	complete: (results) => {
+          this.setState({...this.state, comFile: results})
+	     }
+    })
   }
 
   render() {
@@ -35,15 +44,15 @@ class App extends Component {
         <Header as='h3' >
       Input Form
       </Header>
-      <Input label='AGN' placeholder='' style={{padding: "5px"}}/>
+      <Input id='agn' label='AGN' value={this.state.agn} onChange={this.handleChange} placeholder='' style={{padding: "5px"}}/>
       <br/>
-      <Input label='Z' placeholder='' style={{padding: "5px"}}/>
+      <Input id='z' label='Z' value={this.state.z} onChange={this.handleChange} placeholder='' style={{padding: "5px"}}/>
       <br/>
-      <Input label='n' placeholder='' style={{padding: "5px"}}/>
+      <Input id='n' label='N' value={this.state.n} onChange={this.handleChange} placeholder='' style={{padding: "5px"}}/>
       <br/>
-      <Input label='NH' placeholder='' style={{padding: "5px"}}/>
+      <Input id='nh' label='NH' value={this.state.nh} onChange={this.handleChange} placeholder='' style={{padding: "5px"}}/>
       <br/>
-      <Input label='R' placeholder='' style={{padding: "5px"}}/>
+      <Input id='r' label='R' value={this.state.r} onChange={this.handleChange} placeholder='' style={{padding: "5px"}}/>
       <br/>
       <Button style={{margin: "5px", width: "154px", height: "37px"}}>
       Submit
