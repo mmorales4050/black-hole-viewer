@@ -22,7 +22,7 @@ class Lines extends Component {
     return (
       <List divided relaxed style={{"paddingTop": "30px"}}>
       {this.renderList().map((item) => {
-        return <List.Item>{item[0]} - {item[1]}</List.Item>
+        return <List.Item key={item[0]}>{item[0]} - {item[1]}</List.Item>
       })}
   </List>
     );
