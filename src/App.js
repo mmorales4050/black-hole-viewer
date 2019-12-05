@@ -72,7 +72,7 @@ class App extends Component {
         <Grid.Column textAlign='center'>
         <Header as='h3'>
       Top 50 Brightest lines
-      <Lines selection={this.state.selection}/>
+      <Lines selection={this.state.selection} comFile={this.state.comFile}/>
       </Header>
         </Grid.Column>
       </Grid>
