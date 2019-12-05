@@ -7,6 +7,8 @@ class Graph extends Component {
   //
   renderButton = () => {
     if(this.props.selection.length > 0){
+      let file
+      console.log(this.props.selection)
       return <a href="/favicon.ico" download >
       <Button>
       Download Configuration File
