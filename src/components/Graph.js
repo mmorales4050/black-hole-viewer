@@ -30,7 +30,6 @@ class Graph extends Component {
       if (xhr.readyState === xhr.DONE && this.state.graph !== xhr.responseText) {
           if (xhr.status === 200) {
               this.setState({...this.state, graph: xhr.responseText, graphFile: file})
-              console.log(xhr.responseText)
 
             }
           }
@@ -39,7 +38,13 @@ class Graph extends Component {
     }
 
     renderGraph = () => {
-      return <div>{this.state.graph}</div>
+      let graph = this.state.graph
+      graph = graph.split(/(\s+)/).filter((value) => {
+        return value.includes("e") && value.length > 6
+      })
+      graph.shift()
+      console.log(graph)
+      return <div>{}</div>
     }
 
   render() {
