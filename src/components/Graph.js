@@ -2,28 +2,11 @@ import React, { Component } from 'react';
 import {Button} from 'semantic-ui-react'
 class Graph extends Component {
   state = {
-    graph: ""
+    graph: "",
+    graphFile: ""
   }
 
-  setGraph = file => {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', file , true);
-    // If specified, responseType must be empty string or "text"
-    xhr.responseType = 'text';
-
-    xhr.onload = () => {
-      if (xhr.readyState === xhr.DONE) {
-          if (xhr.status === 200) {
-              this.setState({graph: xhr.responseText})
-              console.log(xhr.responseText)
-            }
-          }
-        }
-        xhr.send(null);
-    }
-
-  renderButton = () => {
-    if(this.props.selection.length > 0){
+  componentDidMount() {
       // Create file name from selection
       let zeros = 9 - Number(this.props.selection[0])
       let file = "grid" + "0".repeat(zeros)
@@ -35,20 +18,40 @@ class Graph extends Component {
       file += this.props.selection[3] + "_" + this.props.selection[1] + "per.con"
       // Set configuration file to state
       this.setGraph("data/" + file)
+  }
 
-      return <a href={"data/" + file} download >
+  setGraph = file => {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', file , true);
+    // If specified, responseType must be empty string or "text"
+    xhr.responseType = 'text';
+
+    xhr.onload = () => {
+      if (xhr.readyState === xhr.DONE && this.state.graph !== xhr.responseText) {
+          if (xhr.status === 200) {
+              this.setState({...this.state, graph: xhr.responseText, graphFile: file})
+              console.log(xhr.responseText)
+
+            }
+          }
+        }
+        xhr.send(null);
+    }
+
+    renderGraph = () => {
+      return <div>{this.state.graph}</div>
+    }
+
+  render() {
+    return (
+      <>
+      {this.renderGraph()}
+      <a href={this.state.graphFile} download >
       <Button>
       Download Configuration File
       </Button>
-      <div></div>
       </a>
-    }else{
-      return null
-    }
-  }
-  render() {
-    return (
-      <>{this.renderButton()}</>
+      </>
     );
   }
 

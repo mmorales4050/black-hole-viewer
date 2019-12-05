@@ -68,7 +68,9 @@ class App extends Component {
         <Header as='h3'>
       Graph
       </Header>
-      <Graph selection={this.state.selection}/>
+      {!this.state.selection.length > 0 ? null :
+        <Graph selection={this.state.selection}/>
+      }
         </Grid.Column>
         <Grid.Column textAlign='center'>
         <Header as='h3'>
