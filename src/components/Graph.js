@@ -1,10 +1,27 @@
 import React, { Component } from 'react';
 import {Button} from 'semantic-ui-react'
 class Graph extends Component {
-  // <a href="/favicon.ico" download >
-  // download
-  // </a>
-  //
+  state = {
+    graph: ""
+  }
+
+  setGraph = file => {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', file , true);
+    // If specified, responseType must be empty string or "text"
+    xhr.responseType = 'text';
+
+    xhr.onload = () => {
+      if (xhr.readyState === xhr.DONE) {
+          if (xhr.status === 200) {
+              this.setState({graph: xhr.responseText})
+              console.log(xhr.responseText)
+            }
+          }
+        }
+        xhr.send(null);
+    }
+
   renderButton = () => {
     if(this.props.selection.length > 0){
       // Create file name from selection
@@ -16,10 +33,14 @@ class Graph extends Component {
         file += "_Z_0p1_n_"
       }
       file += this.props.selection[3] + "_" + this.props.selection[1] + "per.con"
+      // Set configuration file to state
+      this.setGraph("data/" + file)
+
       return <a href={"data/" + file} download >
       <Button>
       Download Configuration File
       </Button>
+      <div></div>
       </a>
     }else{
       return null
