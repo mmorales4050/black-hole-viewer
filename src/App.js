@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Lines from './components/Lines'
+import Graph from './components/Graph'
 import Papa from 'papaparse';
 import './App.css';
 import { Button, Grid, Header, Input } from 'semantic-ui-react'
@@ -68,6 +69,7 @@ class App extends Component {
         <Header as='h3'>
       Graph
       </Header>
+      <Graph selection={this.state.selection}/>
         </Grid.Column>
         <Grid.Column textAlign='center'>
         <Header as='h3'>
