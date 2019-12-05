@@ -38,20 +38,12 @@ class GraphContainer extends Component {
         xhr.send(null);
     }
 
-    renderGraph = () => {
-      let graph = this.state.graph
-      graph = graph.split(/(\s+)/).filter((value) => {
-        return value.includes("e") && value.length > 6
-      })
-      graph.shift()
-      console.log(graph)
-      return <Graph />
-    }
-
   render() {
     return (
       <>
-      {this.renderGraph()}
+      {this.state.graph === "" ? null :
+        <Graph graph={this.state.graph}/>
+      }
       <a href={this.state.graphFile} download >
       <Button>
       Download Configuration File

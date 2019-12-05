@@ -6,22 +6,42 @@ export default class Graph extends Component {
     chartRef = React.createRef();
 
     componentDidMount() {
+      let graph = this.props.graph
+      graph = graph.split(/(\s+)/).filter((value) => {
+        return value.includes("e") && value.length > 6
+      })
+      graph.shift()
+      console.log(graph)
         const myChartRef = this.chartRef.current.getContext("2d");
 
         new Chart(myChartRef, {
             type: "line",
             data: {
                 //Bring in data
-                labels: ["Jan", "Feb", "March"],
                 datasets: [
                     {
-                        label: "Sales",
-                        data: [86, 67, 91],
+                      fill: false,
+                        label: "NU",
+                        data: [],
+                    },
+                    {
+                      fill: false,
+                      label: "REFLC",
+                      data: [],
                     }
                 ]
             },
             options: {
-                //Customize chart options
+                scales: {
+                  xAxes: [{
+                    display: true,
+                    type: 'logarithmic'
+                  }],
+                  yAxes: [{
+                    display: true,
+                    type: 'logarithmic'
+                  }]
+                }
             }
         });
     }
