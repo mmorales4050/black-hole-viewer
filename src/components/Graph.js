@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
-import Chart from "chart.js";
-
+import CanvasJSReact from './canvasjs.react'
+let CanvasJS = CanvasJSReact.CanvasJS;
+let CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 export default class Graph extends Component {
-    chartRef = React.createRef();
+    state = {
+      data: [],
+      x_max: null,
+      y_max: null
+    }
 
     componentDidMount() {
       // filter out data that will not be graphed
@@ -18,111 +23,68 @@ export default class Graph extends Component {
       let counter = 0
       let nu_counter = 0
       let total_counter = 6
+      let max_x = 0
+      let max_y = 0
       graph.forEach((value) => {
         if(counter - nu_counter === 0) {
           nu_counter += 9
           data_point.x = Number(value)
+          if(Number(value) > max_x) {
+            max_x = Number(value)
+          }
         }
         if(counter - total_counter === 0) {
           total_counter += 9
           data_point.y = Number(value)
           data_set.push(data_point)
+          if(Number(value) > max_y) {
+            max_y = Number(value)
+          }
         }
         counter ++
       })
-      console.log(data_set)
-        const myChartRef = this.chartRef.current.getContext("2d");
+      this.setState({...this.state, data: data_set, max_x: max_x, max_y: max_y})
+    }
 
-        new Chart(myChartRef, {
-    type: 'scatter',
-    data: {
-        datasets: [{
-            label: 'Scatter Dataset',
-            data: [...data_set, {
-                x: -10,
-                y: 0
-            }, {
-                x: 0,
-                y: 10
-            }, {
-                x: 10,
-                y: 5
-            }]
-        }]
-    },
-    options: {
-        scales: {
-            xAxes: [{
-                type: 'logarithmic',
-                position: 'bottom'
-            }]
-        }
-    }
-      });
-    }
     render() {
+      const options = {
+          theme: "dark2",
+          animationEnabled: true,
+          zoomEnabled: true,
+          title:{
+            text: "Ice Cream Sales vs Temperature"
+          },
+          axisX: {
+            title:"Temperature (in °C)",
+            minimum: 0,
+		        maximum: this.state.max_x,
+            suffix: "°C",
+            crosshair: {
+              enabled: true,
+              snapToDataPoint: true
+            }
+          },
+          axisY:{
+            title: "Sales",
+            minimum: 0,
+		        maximum: this.state.max_y,
+            crosshair: {
+              enabled: true,
+              snapToDataPoint: true
+            }
+          },
+          data: [{
+            type: "scatter",
+            markerSize: 15,
+            toolTipContent: "<b>Temperature: </b>{x}°C<br/><b>Sales: </b>{y}",
+            dataPoints: this.state.data
+          }]
+        }
+        console.log(this.state)
         return (
             <div >
-                <canvas
-                    id="myChart"
-                    ref={this.chartRef}
-                />
+            <CanvasJSChart options = {options}/>
             </div>
         )
     }
 }
-
-
-	// var color = Chart.helpers.color;
-	// var scatterChartData = {
-	// 	datasets: [{
-	// 		borderColor: window.chartColors.red,
-	// 		backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-	// 		label: 'V(node2)',
-	// 		data: []
-	// 	}]
-	// };
-  //
-	// window.onload = function() {
-	// 	var ctx = document.getElementById('canvas').getContext('2d');
-	// 	window.myScatter = Chart.Scatter(ctx, {
-	// 		data: scatterChartData,
-	// 		options: {
-	// 			title: {
-	// 				display: true,
-	// 				text: 'Chart.js Scatter Chart - Logarithmic X-Axis'
-	// 			},
-	// 			scales: {
-	// 				xAxes: [{
-	// 					type: 'logarithmic',
-	// 					position: 'bottom',
-	// 					ticks: {
-	// 						userCallback: function(tick) {
-	// 							var remain = tick / (Math.pow(10, Math.floor(Chart.helpers.log10(tick))));
-	// 							if (remain === 1 || remain === 2 || remain === 5) {
-	// 								return tick.toString() + 'Hz';
-	// 							}
-	// 							return '';
-	// 						},
-	// 					},
-	// 					scaleLabel: {
-	// 						labelString: 'Frequency',
-	// 						display: true,
-	// 					}
-	// 				}],
-	// 				yAxes: [{
-	// 					type: 'linear',
-	// 					ticks: {
-	// 						userCallback: function(tick) {
-	// 							return tick.toString() + 'dB';
-	// 						}
-	// 					},
-	// 					scaleLabel: {
-	// 						labelString: 'Voltage',
-	// 						display: true
-	// 					}
-	// 				}]
-	// 			}
-	// 		}
-	// 	});
-	// };
