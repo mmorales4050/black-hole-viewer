@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button} from 'semantic-ui-react'
+import {Button, Header} from 'semantic-ui-react'
 import Graph from './Graph'
 import Graph1 from './Graph1'
 
