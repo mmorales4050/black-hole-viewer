@@ -17,6 +17,7 @@ export default class Graph extends Component {
         return value.includes("e") && value.length > 6
       })
       graph.shift()
+      console.log(graph)
       // extract data that will be graphed
       let data_set = []
       let data_point = {}
@@ -37,35 +38,39 @@ export default class Graph extends Component {
           total_counter += 9
           data_point.y = Number(value)
           data_set.push(data_point)
+          data_point = {}
           if(Number(value) > max_y) {
             max_y = Number(value)
           }
         }
         counter ++
       })
+      // console.log(data_set)
       this.setState({...this.state, data: data_set, max_x: max_x, max_y: max_y})
     }
 
     render() {
       const options = {
-          theme: "dark2",
+        zoomEnabled: true,
+			animationEnabled: true,
           animationEnabled: true,
           zoomEnabled: true,
-          title:{
-            text: "Ice Cream Sales vs Temperature"
-          },
+          // title:{
+          //   text: "Cont nu / Total"
+          // },
           axisX: {
-            title:"Temperature (in °C)",
+
+            title:"Cont nu",
             minimum: 0,
 		        maximum: this.state.max_x,
-            suffix: "°C",
             crosshair: {
               enabled: true,
               snapToDataPoint: true
             }
           },
           axisY:{
-            title: "Sales",
+
+            title: "Total",
             minimum: 0,
 		        maximum: this.state.max_y,
             crosshair: {
@@ -75,15 +80,14 @@ export default class Graph extends Component {
           },
           data: [{
             type: "scatter",
-            markerSize: 15,
-            toolTipContent: "<b>Temperature: </b>{x}°C<br/><b>Sales: </b>{y}",
+            markerSize: 5,
+            toolTipContent: "<b>Cont nu: </b>{x}<br/><b>Total: </b>{y}",
             dataPoints: this.state.data
           }]
         }
-        console.log(this.state)
         return (
             <div >
-            <CanvasJSChart options = {options}/>
+            <CanvasJSChart options = {options} />
             </div>
         )
     }
