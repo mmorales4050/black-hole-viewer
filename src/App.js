@@ -17,14 +17,19 @@ class App extends Component {
     z: "1", // index 2
     n: "300", // index 3
     r: "21.6", // index 4
-    nh: "20" // index 5
+    nh: "20", // index 5,
+    warning: false
   }
 
   handleClick = (e) => {
     let selection = this.state.comFile.data.filter((item) => {
       return parseFloat(item[1]) === parseFloat(this.state.agn) && parseFloat(item[2]) === parseFloat(this.state.z) && parseFloat(item[3]) === parseFloat(this.state.n) && parseFloat(item[4]) === parseFloat(this.state.r) && parseFloat(item[5]) === parseFloat(this.state.nh)
     })
-    this.setState({...this.state, selection: selection[0]})
+    if(selection.length === 0) {
+
+    }else {
+      this.setState({...this.state, selection: selection[0]})
+    }
   }
 
   handleChange = (e) => {
