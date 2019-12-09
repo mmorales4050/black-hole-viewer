@@ -5,3 +5,20 @@ div.ui.label.label {
 input {
   width: 100px;
 }
+
+#grid-container {
+  width:100%!important;
+  margin:0px!important;
+}
+
+#col-1 {
+  width:25%;
+}
+
+#col-2 {
+  width:50%;
+}
+
+#col-3 {
+  width:25%;
+}

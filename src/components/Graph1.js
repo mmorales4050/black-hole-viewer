@@ -69,7 +69,7 @@ export default class Graph extends Component {
     options={{
       intervals: { style: 'sticks' },
       legend: 'none',
-      chartArea: { width: '40%' },
+      chartArea: { width: '75%' },
       hAxis: {
         title: 'Total',
         scaleType: 'log',

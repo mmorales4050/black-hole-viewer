@@ -44,8 +44,8 @@ class App extends Component {
 
   render() {
     return (
-      <Grid container columns={3} divided relaxed stackable style={{"paddingTop": "30px"}}>
-        <Grid.Column textAlign='center'>
+      <Grid container columns={3} divided relaxed stackable style={{"paddingTop": "30px", "width":"100%"}} id="grid-container">
+        <Grid.Column textAlign='center' id="col-1">
         <Header as='h3' >
       Input Form
       </Header>
@@ -64,7 +64,7 @@ class App extends Component {
       </Button>
         </Grid.Column>
 
-        <Grid.Column textAlign='center'>
+        <Grid.Column textAlign='center' id="col-2">
         <Header as='h3'>
       Graph
       </Header>
@@ -72,7 +72,7 @@ class App extends Component {
         <GraphContainer selection={this.state.selection}/>
       }
         </Grid.Column>
-        <Grid.Column textAlign='center'>
+        <Grid.Column textAlign='center' id="col-3">
         <Header as='h3'>
       Top 50 Brightest lines
       <Lines selection={this.state.selection} comFile={this.state.comFile}/>
