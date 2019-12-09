@@ -6,8 +6,10 @@ let CanvasJSChart = CanvasJSReact.CanvasJSChart;
 export default class Graph extends Component {
     state = {
       data: [],
-      x_max: null,
-      y_max: null
+      max_x: null,
+      max_y: null,
+      min_x: null,
+      min_y: null
     }
 
     componentDidMount() {
@@ -25,6 +27,8 @@ export default class Graph extends Component {
       let nu_counter = 0
       let total_counter = 6
       let max_x = 0
+      let min_x = graph[0]
+      let min_y = graph[6]
       let max_y = 0
       graph.forEach((value) => {
         if(counter - nu_counter === 0) {
@@ -32,6 +36,9 @@ export default class Graph extends Component {
           data_point.x = Number(value)
           if(Number(value) > max_x) {
             max_x = Number(value)
+          }
+          if(Number(value) < min_x) {
+            min_x = Number(value)
           }
         }
         if(counter - total_counter === 0) {
@@ -42,11 +49,14 @@ export default class Graph extends Component {
           if(Number(value) > max_y) {
             max_y = Number(value)
           }
+          if(Number(value) < min_y) {
+            min_y = Number(value)
+          }
         }
         counter ++
       })
       // console.log(data_set)
-      this.setState({...this.state, data: data_set, max_x: max_x, max_y: max_y})
+      this.setState({...this.state, data: data_set, max_x: max_x, max_y: max_y, min_x: min_x, min_y: min_y})
     }
 
     render() {
@@ -59,9 +69,10 @@ export default class Graph extends Component {
           //   text: "Cont nu / Total"
           // },
           axisX: {
-
+            logarithmic: true,
+   logarithmBase:  10,
             title:"Cont nu",
-            minimum: 0,
+            minimum: this.state.min_x,
 		        maximum: this.state.max_x,
             crosshair: {
               enabled: true,
@@ -69,9 +80,10 @@ export default class Graph extends Component {
             }
           },
           axisY:{
-
+            logarithmic: true,
+   logarithmBase:  10,
             title: "Total",
-            minimum: 0,
+            minimum: this.state.min_y,
 		        maximum: this.state.max_y,
             crosshair: {
               enabled: true,
@@ -79,7 +91,7 @@ export default class Graph extends Component {
             }
           },
           data: [{
-            type: "scatter",
+            type: "line",
             markerSize: 5,
             toolTipContent: "<b>Cont nu: </b>{x}<br/><b>Total: </b>{y}",
             dataPoints: this.state.data
