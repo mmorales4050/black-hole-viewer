@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Button} from 'semantic-ui-react'
-import Graph from './Graph'
+import Graph from './Graph1'
 class GraphContainer extends Component {
   state = {
     graph: "",
