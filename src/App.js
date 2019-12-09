@@ -26,8 +26,9 @@ class App extends Component {
       return parseFloat(item[1]) === parseFloat(this.state.agn) && parseFloat(item[2]) === parseFloat(this.state.z) && parseFloat(item[3]) === parseFloat(this.state.n) && parseFloat(item[4]) === parseFloat(this.state.r) && parseFloat(item[5]) === parseFloat(this.state.nh)
     })
     if(selection.length === 0) {
-
+      console.log("invalid input")
     }else {
+      console.log("Graph updated")
       this.setState({...this.state, selection: selection[0]})
     }
   }
