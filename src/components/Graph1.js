@@ -71,12 +71,12 @@ export default class Graph extends Component {
       legend: 'none',
       chartArea: { width: '75%' },
       hAxis: {
-        title: 'Total',
+        title: 'Cont nu',
         scaleType: 'log',
         format: 'scientific'
       },
       vAxis: {
-        title: 'Cont nu',
+        title: 'Total',
         scaleType: 'log',
         format: 'scientific'
       },

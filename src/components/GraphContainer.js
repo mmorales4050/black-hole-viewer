@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import {Button} from 'semantic-ui-react'
-import Graph from './Graph1'
+import Graph from './Graph'
+import Graph1 from './Graph1'
+
 class GraphContainer extends Component {
   state = {
     graph: "",
-    graphFile: ""
+    graphFile: "",
+    toggle: false
   }
 
   componentDidMount() {
@@ -19,6 +22,10 @@ class GraphContainer extends Component {
       file += this.props.selection[3] + "_" + this.props.selection[1] + "per.con"
       // Set configuration file to state
       this.setGraph("data/" + file)
+  }
+
+  toggleGraph = () => {
+    this.setState({...this.state, toggle: !this.state.toggle})
   }
 
   setGraph = file => {
@@ -41,14 +48,24 @@ class GraphContainer extends Component {
   render() {
     return (
       <>
+      <Header as='h3'>
+    Graph {
+      this.state.toggle ? "2" : "1"
+    }
+    </Header>
       {this.state.graph === "" ? null :
-        <Graph graph={this.state.graph}/>
+        this.state.toggle ?
+        <Graph graph={this.state.graph}/> :
+        <Graph1 graph={this.state.graph}/>
       }
       <a href={this.state.graphFile} download >
       <Button>
       Download Configuration File
       </Button>
       </a>
+      <Button onClick={this.toggleGraph}>
+      Change Graph
+      </Button>
       </>
     );
   }
