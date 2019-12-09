@@ -17,7 +17,7 @@ export default class Graph extends Component {
         return value.includes("e") && value.length > 6
       })
       graph.shift()
-      console.log(graph)
+      // console.log(graph)
       // extract data that will be graphed
       let data_set = []
       let data_point = {}
