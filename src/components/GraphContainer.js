@@ -12,8 +12,9 @@ class GraphContainer extends Component {
 
   componentDidMount() {
       // Create file name from selection
-      let zeros = 9 - Number(this.props.selection[0])
-      let file = "grid" + "0".repeat(zeros)
+      let zeros = 9 - this.props.selection[0].length
+      // debugger
+      let file = "grid" + "0".repeat(zeros) + this.props.selection[0]
       if(this.props.selection[2] === "1") {
         file += "_Z_1_n_"
       } else {

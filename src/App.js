@@ -13,11 +13,11 @@ class App extends Component {
   state = {
     comFile: null,
     selection: [],
-    agn: "10", // index 1
-    z: "1", // index 2
+    agn: "5", // index 1
+    z: "0.1", // index 2
     n: "300", // index 3
-    r: "21.6", // index 4
-    nh: "20", // index 5,
+    r: "19.2", // index 4
+    nh: "21", // index 5,
     warning: false
   }
 
@@ -61,9 +61,9 @@ class App extends Component {
       <br/>
       <Input id='n' label='N' value={this.state.n} onChange={this.handleChange} placeholder='' style={{padding: "5px"}}/>
       <br/>
-      <Input id='nh' label='NH' value={this.state.nh} onChange={this.handleChange} placeholder='' style={{padding: "5px"}}/>
-      <br/>
       <Input id='r' label='R' value={this.state.r} onChange={this.handleChange} placeholder='' style={{padding: "5px"}}/>
+      <br/>
+      <Input id='nh' label='NH' value={this.state.nh} onChange={this.handleChange} placeholder='' style={{padding: "5px"}}/>
       <br/>
       <Button onClick={this.handleClick} style={{margin: "5px", width: "154px", height: "37px"}}>
       Submit

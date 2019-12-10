@@ -16,8 +16,7 @@ export default class Graph extends Component {
       graph = graph.split(/(\s+)/).filter((value) => {
         return value.includes("e") && value.length > 6
       })
-      graph.shift()
-      // console.log(graph)
+
       // extract data that will be graphed
       let data_set = []
       let data_point = {}
@@ -53,8 +52,8 @@ export default class Graph extends Component {
         }
         counter ++
       })
-      // console.log(data_set)
       this.setState({...this.state, data: data_set, max_x: max_x, max_y: max_y, min_x: min_x, min_y: min_y})
+
     }
 
     render() {
