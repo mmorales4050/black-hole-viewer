@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import Lines from './components/Lines'
+import Form from './components/Form'
 import GraphContainer from './components/GraphContainer'
 import Papa from 'papaparse';
 import './App.css';
-import { Button, Grid, Header, Input } from 'semantic-ui-react'
+import { Grid, Header } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 
 class App extends Component {
@@ -11,21 +12,12 @@ class App extends Component {
     comFile: null,
     graphFile: null,
     selection: [], // Used to display top 50 brightest lines
-    data: [], // Data for graph
-    agn: "5", // index 1
-    z: "0.1", // index 2
-    n: "300", // index 3
-    r: "19.2", // index 4
-    nh: "21" // index 5,
+    data: [] // Data for graph
   }
 
-  handleChange = (e) => {
-    this.setState({...this.state, [e.target.id]: e.target.value})
-  }
-
-  handleClick = (e) => {
+  updateApp = (state) => {
     let selection = this.state.comFile.data.filter((item) => {
-      return parseFloat(item[1]) === parseFloat(this.state.agn) && parseFloat(item[2]) === parseFloat(this.state.z) && parseFloat(item[3]) === parseFloat(this.state.n) && parseFloat(item[4]) === parseFloat(this.state.r) && parseFloat(item[5]) === parseFloat(this.state.nh)
+      return parseFloat(item[1]) === parseFloat(state.agn) && parseFloat(item[2]) === parseFloat(state.z) && parseFloat(item[3]) === parseFloat(state.n) && parseFloat(item[4]) === parseFloat(state.r) && parseFloat(item[5]) === parseFloat(state.nh)
     })
     if(selection.length === 0) {
       // Warn user that input is invalid
@@ -128,24 +120,11 @@ class App extends Component {
     return (
       <Grid container columns={3} divided relaxed stackable style={{"paddingTop": "30px", "width":"100%"}} id="grid-container">
         <Grid.Column textAlign='center' id="col-1">
-        <Header as='h3' >
+      <Header as='h3' >
       Input Form
       </Header>
-      <Input onBlur={this.handleChange} id='agn' label='AGN' value={this.state.agn} placeholder='' style={{padding: "5px"}}/>
-      <br/>
-      <Input onBlur={this.handleChange} id='z' label='Z' value={this.state.z} placeholder='' style={{padding: "5px"}}/>
-      <br/>
-      <Input onBlur={this.handleChange} id='n' label='N' value={this.state.n} placeholder='' style={{padding: "5px"}}/>
-      <br/>
-      <Input onBlur={this.handleChange} id='r' label='R' value={this.state.r} placeholder='' style={{padding: "5px"}}/>
-      <br/>
-      <Input onBlur={this.handleChange} id='nh' label='NH' value={this.state.nh} placeholder='' style={{padding: "5px"}}/>
-      <br/>
-      <Button onClick={this.handleClick} style={{margin: "5px", width: "154px", height: "37px"}}>
-      Submit
-      </Button>
+      <Form updateApp={this.updateApp}/>
         </Grid.Column>
-
         <Grid.Column textAlign='center' id="col-2">
 
       {!this.state.selection.length > 0 ? null : <GraphContainer selection={this.state.selection} data={this.state.data} graphFile={this.state.graphFile}/>
