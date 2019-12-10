@@ -19,6 +19,10 @@ class App extends Component {
     nh: "21" // index 5,
   }
 
+  handleChange = (e) => {
+    this.setState({...this.state, [e.target.id]: e.target.value})
+  }
+
   handleClick = (e) => {
     let selection = this.state.comFile.data.filter((item) => {
       return parseFloat(item[1]) === parseFloat(this.state.agn) && parseFloat(item[2]) === parseFloat(this.state.z) && parseFloat(item[3]) === parseFloat(this.state.n) && parseFloat(item[4]) === parseFloat(this.state.r) && parseFloat(item[5]) === parseFloat(this.state.nh)
@@ -109,11 +113,7 @@ class App extends Component {
     return data_set
   }
 
-  handleChange = (e) => {
-    let newState = {...this.state}
-    newState[e.target.id] = e.target.value
-    this.setState(newState)
-  }
+
 
   componentDidMount() {
     Papa.parse("combinedFile.csv", {
@@ -131,15 +131,15 @@ class App extends Component {
         <Header as='h3' >
       Input Form
       </Header>
-      <Input id='agn' label='AGN' value={this.state.agn} onChange={this.handleChange} placeholder='' style={{padding: "5px"}}/>
+      <Input onBlur={this.handleChange} id='agn' label='AGN' value={this.state.agn} placeholder='' style={{padding: "5px"}}/>
       <br/>
-      <Input id='z' label='Z' value={this.state.z} onChange={this.handleChange} placeholder='' style={{padding: "5px"}}/>
+      <Input onBlur={this.handleChange} id='z' label='Z' value={this.state.z} placeholder='' style={{padding: "5px"}}/>
       <br/>
-      <Input id='n' label='N' value={this.state.n} onChange={this.handleChange} placeholder='' style={{padding: "5px"}}/>
+      <Input onBlur={this.handleChange} id='n' label='N' value={this.state.n} placeholder='' style={{padding: "5px"}}/>
       <br/>
-      <Input id='r' label='R' value={this.state.r} onChange={this.handleChange} placeholder='' style={{padding: "5px"}}/>
+      <Input onBlur={this.handleChange} id='r' label='R' value={this.state.r} placeholder='' style={{padding: "5px"}}/>
       <br/>
-      <Input id='nh' label='NH' value={this.state.nh} onChange={this.handleChange} placeholder='' style={{padding: "5px"}}/>
+      <Input onBlur={this.handleChange} id='nh' label='NH' value={this.state.nh} placeholder='' style={{padding: "5px"}}/>
       <br/>
       <Button onClick={this.handleClick} style={{margin: "5px", width: "154px", height: "37px"}}>
       Submit
