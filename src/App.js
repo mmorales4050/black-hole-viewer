@@ -13,6 +13,7 @@ class App extends Component {
   state = {
     comFile: null,
     selection: [],
+    data: [],
     agn: "5", // index 1
     z: "0.1", // index 2
     n: "300", // index 3

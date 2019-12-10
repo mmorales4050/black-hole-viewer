@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import Chart from "react-google-charts"
+import CanvasJSReact from './canvasjs.react'
+let CanvasJS = CanvasJSReact.CanvasJS;
+let CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 export default class Graph extends Component {
     state = {
@@ -16,7 +18,8 @@ export default class Graph extends Component {
       graph = graph.split(/(\s+)/).filter((value) => {
         return value.includes("e") && value.length > 6
       })
-
+      graph.shift()
+      console.log(graph)
       // extract data that will be graphed
       let data_set = []
       let data_point = {}
@@ -41,7 +44,7 @@ export default class Graph extends Component {
         if(counter - total_counter === 0) {
           total_counter += 9
           data_point.y = Number(value)
-          data_set.push([data_point.x, data_point.y])
+          data_set.push(data_point)
           data_point = {}
           if(Number(value) > max_y) {
             max_y = Number(value)
@@ -52,36 +55,52 @@ export default class Graph extends Component {
         }
         counter ++
       })
+      // console.log(data_set)
       this.setState({...this.state, data: data_set, max_x: max_x, max_y: max_y, min_x: min_x, min_y: min_y})
-
     }
 
     render() {
+      const options = {
+        zoomEnabled: true,
+			animationEnabled: true,
+          animationEnabled: true,
+          zoomEnabled: true,
+          // title:{
+          //   text: "Cont nu / Total"
+          // },
+          axisX: {
+            logarithmic: true,
+   logarithmBase:  10,
+            title:"Cont nu",
+            minimum: this.state.min_x,
+		        maximum: this.state.max_x,
+            crosshair: {
+              enabled: true,
+              snapToDataPoint: true
+            }
+          },
+          axisY:{
+            logarithmic: true,
+   logarithmBase:  10,
+            title: "Total",
+            minimum: this.state.min_y,
+		        maximum: this.state.max_y,
+            crosshair: {
+              enabled: true,
+              snapToDataPoint: true
+            }
+          },
+          data: [{
+            type: "line",
+            markerSize: 5,
+            toolTipContent: "<b>Cont nu: </b>{x}<br/><b>Total: </b>{y}",
+            dataPoints: this.state.data
+          }]
+        }
         return (
-            <Chart
-    chartType="LineChart"
-    loader={<div>Loading Chart</div>}
-    data={[
-      ['Cont nu', 'Total'],
-      ...this.state.data
-    ]}
-    options={{
-      intervals: { style: 'sticks' },
-      legend: 'none',
-      chartArea: { width: '75%' },
-      hAxis: {
-        title: 'Cont nu',
-        scaleType: 'log',
-        format: 'scientific'
-      },
-      vAxis: {
-        title: 'Total',
-        scaleType: 'log',
-        format: 'scientific'
-      },
-    }}
-
-  />
+            <div >
+            <CanvasJSChart options = {options} />
+            </div>
         )
     }
 }

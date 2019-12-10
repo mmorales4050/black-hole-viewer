@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {Button, Header} from 'semantic-ui-react'
 import Graph from './Graph'
-import Graph1 from './Graph1'
 
 class GraphContainer extends Component {
   state = {
@@ -55,7 +54,7 @@ class GraphContainer extends Component {
     }
     </Header>
       {this.state.graph === "" ? null :
-      <Graph1 graph={this.state.graph}/>
+      <Graph graph={this.state.graph}/>
       //   this.state.toggle ?
       //   <Graph graph={this.state.graph}/> :
       //   <Graph1 graph={this.state.graph}/>
@@ -65,9 +64,10 @@ class GraphContainer extends Component {
       Download Configuration File
       </Button>
       </a>
-      <Button onClick={this.toggleGraph}>
-      Change Graph
-      </Button>
+      {//<Button onClick={this.toggleGraph}>
+      //Change Graph
+      //</Button>
+      }
       </>
     );
   }
