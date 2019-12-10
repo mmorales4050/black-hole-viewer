@@ -6,20 +6,17 @@ import './App.css';
 import { Button, Grid, Header, Input } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 
-
-
-
 class App extends Component {
   state = {
     comFile: null,
-    selection: [],
-    data: [],
+    graphFile: null,
+    selection: [], // Used to display top 50 brightest lines
+    data: [], // Data for graph
     agn: "5", // index 1
     z: "0.1", // index 2
     n: "300", // index 3
     r: "19.2", // index 4
-    nh: "21", // index 5,
-    warning: false
+    nh: "21" // index 5,
   }
 
   handleClick = (e) => {
@@ -27,11 +24,89 @@ class App extends Component {
       return parseFloat(item[1]) === parseFloat(this.state.agn) && parseFloat(item[2]) === parseFloat(this.state.z) && parseFloat(item[3]) === parseFloat(this.state.n) && parseFloat(item[4]) === parseFloat(this.state.r) && parseFloat(item[5]) === parseFloat(this.state.nh)
     })
     if(selection.length === 0) {
+      // Warn user that input is invalid
       console.log("invalid input")
     }else {
       console.log("Graph updated")
-      this.setState({...this.state, selection: selection[0]})
+      // update graph and top 50 brightest lines
+      let file = this.fileName(selection[0])
+      this.setState({...this.state, selection: selection[0], graphFile: file})
+      this.setData(file)
     }
+  }
+
+  fileName = (selection) => {
+    // Create file name from selection
+    let zeros = 9 - selection[0].length
+    // debugger
+    let file = "grid" + "0".repeat(zeros) + selection[0]
+    if(selection[2] === "1") {
+      file += "_Z_1_n_"
+    } else {
+      file += "_Z_0p1_n_"
+    }
+    file += selection[3] + "_" + selection[1] + "per.con"
+    // Set configuration file to state
+    return ("data/" + file)
+  }
+
+  setData = file => {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', file , true);
+    // If specified, responseType must be empty string or "text"
+    xhr.responseType = 'text';
+
+    xhr.onload = () => {
+      if (xhr.readyState === xhr.DONE && this.state.graphContents !== xhr.responseText) {
+          if (xhr.status === 200) {
+              this.setState({...this.state, data: this.extractData(xhr.responseText)})
+            }
+          }
+        }
+        xhr.send(null);
+  }
+
+  extractData = graph => {
+    graph = graph.split(/(\s+)/).filter((value) => {
+      return value.includes("e") && value.length > 6 && !value.includes("i")
+    })
+
+    // extract data that will be graphed
+    let data_set = []
+    let data_point = {}
+    let counter = 0
+    let nu_counter = 0
+    let total_counter = 6
+    let max_x = 0
+    let min_x = graph[0]
+    let min_y = graph[6]
+    let max_y = 0
+    graph.forEach((value) => {
+      if(counter - nu_counter === 0) {
+        nu_counter += 9
+        data_point.x = Number(value)
+        if(Number(value) > max_x) {
+          max_x = Number(value)
+        }
+        if(Number(value) < min_x) {
+          min_x = Number(value)
+        }
+      }
+      if(counter - total_counter === 0) {
+        total_counter += 9
+        data_point.y = Number(value)
+        data_set.push([data_point.x, data_point.y])
+        data_point = {}
+        if(Number(value) > max_y) {
+          max_y = Number(value)
+        }
+        if(Number(value) < min_y) {
+          min_y = Number(value)
+        }
+      }
+      counter ++
+    })
+    return data_set
   }
 
   handleChange = (e) => {
@@ -73,8 +148,7 @@ class App extends Component {
 
         <Grid.Column textAlign='center' id="col-2">
 
-      {!this.state.selection.length > 0 ? null :
-        <GraphContainer selection={this.state.selection}/>
+      {!this.state.selection.length > 0 ? null : <GraphContainer selection={this.state.selection} data={this.state.data} graphFile={this.state.graphFile}/>
       }
         </Grid.Column>
         <Grid.Column textAlign='center' id="col-3">
