@@ -50,13 +50,14 @@ class GraphContainer extends Component {
       <>
       <Header as='h3'>
     Graph {
-      this.state.toggle ? "2" : "1"
+      // this.state.toggle ? "2" : "1"
     }
     </Header>
       {this.state.graph === "" ? null :
-        this.state.toggle ?
-        <Graph graph={this.state.graph}/> :
-        <Graph1 graph={this.state.graph}/>
+      <Graph1 graph={this.state.graph}/>
+      //   this.state.toggle ?
+      //   <Graph graph={this.state.graph}/> :
+      //   <Graph1 graph={this.state.graph}/>
       }
       <a href={this.state.graphFile} download >
       <Button>
