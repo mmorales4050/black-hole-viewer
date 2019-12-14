@@ -6,7 +6,7 @@ class GraphContainer extends Component {
 
   render() {
     return (
-      <Grid textAlign='center'>
+      <Grid textAlign='center' style={{width:"100%"}}>
       <Grid.Row>
       {this.props.data === "" ? null :
       <Graph data={this.props.data}/>

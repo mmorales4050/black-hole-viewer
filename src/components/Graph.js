@@ -15,7 +15,7 @@ export default class Graph extends Component {
     options={{
       intervals: { style: 'sticks' },
       legend: 'none',
-      chartArea: { width: '75%' },
+      chartArea: { width: '60%'},
       hAxis: {
         title: 'Cont nu',
         scaleType: 'log',
@@ -28,7 +28,7 @@ export default class Graph extends Component {
       },
     }}
 
-  />
+  style={{width:"100%"}}/>
         )
     }
 }
