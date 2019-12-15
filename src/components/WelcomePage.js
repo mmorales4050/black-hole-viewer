@@ -15,8 +15,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function PaperSheet() {
+export default function WelcomePage(props) {
   const classes = useStyles();
+
+  const handleClick = event => {
+    props.toggleInput(true)
+  }
 
   return (
     <Paper className={classes.root}>
@@ -26,7 +30,7 @@ export default function PaperSheet() {
       <Typography component="p">
         This is a tool for visualizing data associated with black holes.
       </Typography>
-      <Button variant="contained" color="primary" className={classes.button}>Get Started</Button>
+      <Button onClick={handleClick} variant="contained" color="primary" className={classes.button}>Get Started</Button>
     </Paper>
   );
 }

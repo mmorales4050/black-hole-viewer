@@ -23,10 +23,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function TemporaryDrawer() {
+export default function TemporaryDrawer(props) {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    open: false,
     agn: "",
     z: "",
     n: "",
@@ -34,13 +33,14 @@ export default function TemporaryDrawer() {
     logU: ""
   });
 
-  const toggleDrawer = (side, open) => event => {
+  const toggleDrawer = (open) => event => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
 
-    setState({ ...state, [side]: open });
+    props.toggleInput(open)
   };
+
   const inputs = [
     {
       name: "agn",
@@ -88,7 +88,7 @@ export default function TemporaryDrawer() {
       </FormControl>
       ))}
       <FormControl className={classes.formControl}>
-       <TextField id="standard-basic" label="LogU" />
+       <TextField value={state.logU} onChange={handleChange} name="logU" id="standard-basic" label="LogU" />
       </FormControl>
       <FormControl className={classes.formControl}>
       <Button variant="contained" color="primary">
@@ -101,10 +101,10 @@ export default function TemporaryDrawer() {
 
   return (
     <div>
-      <IconButton onClick={toggleDrawer('open', true)}edge="end" className={classes.menuButton} color="inherit" aria-label="menu">
+      <IconButton onClick={toggleDrawer(true)}edge="end" className={classes.menuButton} color="inherit" aria-label="menu">
         <SettingsIcon />
       </IconButton>
-      <Drawer anchor="right" open={state.open} onClose={toggleDrawer('open', false)}>
+      <Drawer anchor="right" open={props.inputOpen} onClose={toggleDrawer(false)}>
         {sideList('open')}
       </Drawer>
     </div>

@@ -84,15 +84,62 @@ const useStyles = makeStyles(theme => ({
 export default function PersistentDrawerLeft() {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [state, setState] = React.useState({
+    open: false,
+    inputOpen: false,
+    comFile: null,
+    graphFile: null,
+    selection: [], // Used to display top 50 brightest lines
+    data: [] // Data for graph
+  })
+
+  const toggleInput = (open) => {
+    setState({...state, inputOpen: open})
+  }
 
   const handleDrawerOpen = () => {
-    setOpen(true);
+    setState({...state, open: true})
   };
 
   const handleDrawerClose = () => {
-    setOpen(false);
+    setState({...state, open: false})
   };
+
+  const drawer = () => {
+    return <Drawer
+      className={classes.drawer}
+      variant="persistent"
+      anchor="left"
+      open={state.open}
+      classes={{
+        paper: classes.drawerPaper,
+      }}
+    >
+      <div className={classes.drawerHeader}>
+        <IconButton onClick={handleDrawerClose}>
+          {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+        </IconButton>
+      </div>
+      <Divider />
+      <List>
+        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+    </Drawer>
+  }
 
   return (
     <div className={classes.root}>
@@ -100,7 +147,7 @@ export default function PersistentDrawerLeft() {
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
+          [classes.appBarShift]: state.open,
         })}
       >
         <Toolbar>
@@ -109,56 +156,24 @@ export default function PersistentDrawerLeft() {
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
+            className={clsx(classes.menuButton, state.open && classes.hide)}
           >
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap className={classes.title}>
             Graph
           </Typography>
-          <TemporaryDrawer />
+          <TemporaryDrawer inputOpen={state.inputOpen} toggleInput={toggleInput}/>
         </Toolbar>
       </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+      {drawer()}
       <main
         className={clsx(classes.content, {
-          [classes.contentShift]: open,
+          [classes.contentShift]: state.open,
         })}
       >
         <div className={classes.drawerHeader} />
-        <WelcomePage />
+        <WelcomePage toggleInput={toggleInput}/>
       </main>
     </div>
   );
