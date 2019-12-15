@@ -18,6 +18,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import TemporaryDrawer from './TemporaryDrawer'
+import WelcomePage from './WelcomePage'
 
 const drawerWidth = 240;
 
@@ -157,7 +158,7 @@ export default function PersistentDrawerLeft() {
         })}
       >
         <div className={classes.drawerHeader} />
-        Content Here
+        <WelcomePage />
       </main>
     </div>
   );
