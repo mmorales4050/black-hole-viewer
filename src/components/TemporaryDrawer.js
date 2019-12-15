@@ -6,12 +6,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
@@ -35,7 +29,12 @@ const useStyles = makeStyles(theme => ({
 export default function TemporaryDrawer() {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    left: false
+    open: false,
+    agn: "",
+    z: "",
+    n: "",
+    nh: "",
+    logU: ""
   });
 
   const toggleDrawer = (side, open) => event => {
@@ -63,6 +62,11 @@ export default function TemporaryDrawer() {
       values: [20,21,22,23]
     }
   ]
+
+  const handleChange = event => {
+    setState({...state, [event.target.name]: event.target.value})
+  };
+
   const sideList = side => (
     <div
       className={classes.list}
@@ -71,15 +75,17 @@ export default function TemporaryDrawer() {
     <List>
 
       {inputs.map((input, index) => (
-        <FormControl className={classes.formControl}>
+        <FormControl className={classes.formControl} key={index}>
         <InputLabel id="demo-simple-select-label">{input.name.toUpperCase()}</InputLabel>
         <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={""}
+            name={input.name}
+            value={state[input.name]}
+            onChange={handleChange}
           >
           {input.values.map((value, index) => {
-            return <MenuItem value={value}>{value}</MenuItem>
+            return <MenuItem key={index} value={value}>{value}</MenuItem>
           })}
       </Select>
       </FormControl>
@@ -92,19 +98,17 @@ export default function TemporaryDrawer() {
         Submit
       </Button>
       </FormControl>
-
     </List>
-
     </div>
   );
 
   return (
     <div>
-      <IconButton onClick={toggleDrawer('left', true)}edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+      <IconButton onClick={toggleDrawer('open', true)}edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
         <MenuIcon />
       </IconButton>
-      <Drawer open={state.left} onClose={toggleDrawer('left', false)}>
-        {sideList('left')}
+      <Drawer open={state.open} onClose={toggleDrawer('open', false)}>
+        {sideList('open')}
       </Drawer>
     </div>
   );

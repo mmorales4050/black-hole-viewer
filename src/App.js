@@ -1,17 +1,8 @@
-import React, { Component } from 'react';
-
+import React from 'react';
 import ButtonAppBar from './components/ButtonAppBar'
 
-class App extends Component {
-
-  render() {
+export default function App() {
     return (
-      <>
       <ButtonAppBar />
-      </>
-    );
-  }
-
+    )
 }
-
-export default App;
