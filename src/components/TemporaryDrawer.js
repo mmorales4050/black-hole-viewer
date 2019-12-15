@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import SettingsIcon from '@material-ui/icons/Settings';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import List from '@material-ui/core/List';
@@ -20,9 +20,6 @@ const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 220,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
   }
 }));
 
@@ -104,10 +101,10 @@ export default function TemporaryDrawer() {
 
   return (
     <div>
-      <IconButton onClick={toggleDrawer('open', true)}edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-        <MenuIcon />
+      <IconButton onClick={toggleDrawer('open', true)}edge="end" className={classes.menuButton} color="inherit" aria-label="menu">
+        <SettingsIcon />
       </IconButton>
-      <Drawer open={state.open} onClose={toggleDrawer('open', false)}>
+      <Drawer anchor="right" open={state.open} onClose={toggleDrawer('open', false)}>
         {sideList('open')}
       </Drawer>
     </div>
