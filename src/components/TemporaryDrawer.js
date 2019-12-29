@@ -31,7 +31,7 @@ export default function TemporaryDrawer(props) {
     n: "",
     nh: "",
     logU: ""
-  });
+  })
 
   const toggleDrawer = (open) => event => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -61,7 +61,10 @@ export default function TemporaryDrawer(props) {
   ]
 
   const handleChange = event => {
-    setState({...state, [event.target.name]: event.target.value})
+    setState({
+      ...state,
+      [event.target.name]: event.target.value
+    })
   };
 
   const sideList = side => (
@@ -75,8 +78,8 @@ export default function TemporaryDrawer(props) {
         <FormControl className={classes.formControl} key={index}>
         <InputLabel id="demo-simple-select-label">{input.name.toUpperCase()}</InputLabel>
         <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId="select-label"
+            id="select"
             name={input.name}
             value={state[input.name]}
             onChange={handleChange}
