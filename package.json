@@ -2,7 +2,7 @@
   "name": "gui",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://mmorales4050.github.io/black-hole-viewer/",
+  "homepage": "http://jwstspectra.physics.gmu.edu/",
   "dependencies": {
     "@material-ui/core": "^4.8.0",
     "@material-ui/icons": "^4.5.1",
