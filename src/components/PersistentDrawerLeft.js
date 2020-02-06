@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Graph from './CanvasGraph';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -89,7 +90,9 @@ export default function PersistentDrawerLeft() {
   const useState = React.useState
   const [open, setOpen] = useState(false)
   const [inputOpen, setInputOpen] = useState(false)
-  const [comFile, setComFile] = useState(null)
+  const [comFile, setComFile] = useState(null);
+  const [metaColumns] = useState ([{0: 'col0'}, {1: 'AGN'}, {2: 'Z'}, {3: 'n'}, {4: 'R'}, {5: 'NH'}, {6: 'U'}]);
+  const [columns, setColumns] = useState ([]);
   const [graphFile, setGraphFile] = useState(null)
   const [selection, setSelection] = useState([]) // Used to display top 50 brightest lines
   const [data, setData] = useState([]) // Data for graph
@@ -97,16 +100,18 @@ export default function PersistentDrawerLeft() {
 
   const updateApp = (inputState) => {
     let selection = comFile.data.filter((item) => {
-      return parseFloat(item[1]) === parseFloat(inputState.agn) && parseFloat(item[2]) === parseFloat(inputState.z) && parseFloat(item[3]) === parseFloat(inputState.n) && parseFloat(item[4]) === parseFloat(inputState.r) && parseFloat(item[5]) === parseFloat(inputState.nh)
+      return parseFloat(item[1]) === parseFloat(inputState.agn) && parseFloat(item[2]) === parseFloat(inputState.z) && parseFloat(item[3]) === parseFloat(inputState.n) && parseFloat(item[5]) === parseFloat(inputState.nh)
     })
     if(selection.length === 0) {
       // Warn user that input is invalid
       console.log("invalid input")
     }else {
-      console.log("Graph updated")
+      selection.sort (line => 0 - Math.abs (line [6] - inputState.logU));
+      console.log("Graph updated");
+      let topTen = selection[0].splice (7).map ((item, i) => {return {name: columns [i], value: parseFloat (item).toExponential ()}}).sort ((a, b) => b.value - a.value).splice (0, 10);
       // update graph and top 50 brightest lines
       let file = fileName(selection[0])
-      setSelection(selection[0])
+      setSelection(topTen)
       setGraphFile(file)
       getData(file)
     }
@@ -134,9 +139,9 @@ export default function PersistentDrawerLeft() {
     xhr.responseType = 'text';
 
     xhr.onload = () => {
-      if (xhr.readyState === xhr.DONE && this.state.graphContents !== xhr.responseText) {
+      if (xhr.readyState === xhr.DONE && data !== xhr.responseText) {
           if (xhr.status === 200) {
-              this.setData(extractData(xhr.responseText))
+              setData (extractData(xhr.responseText))
             }
           }
         }
@@ -191,9 +196,11 @@ export default function PersistentDrawerLeft() {
       download: true,
       complete: (results) => {
           setComFile(results)
+          let cl = results.data[0].splice (7).reduce ((acc, val, i) => Object.assign (acc, {[i]: val}), {});
+          setColumns (cl);
        }
     })
-  })
+  }, [])
 
   const toggleInput = (open) => {
     setInputOpen(open)
@@ -263,7 +270,7 @@ export default function PersistentDrawerLeft() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap className={classes.title}>
-            Graph
+            JWST Galaxy Spectral Simulator Tool
           </Typography>
           <TemporaryDrawer
             updateApp={updateApp}
@@ -277,7 +284,21 @@ export default function PersistentDrawerLeft() {
         })}
       >
         <div className={classes.drawerHeader} />
-        <WelcomePage toggleInput={toggleInput}/>
+        { !data.length &&
+          <WelcomePage toggleInput={toggleInput}/>
+        }
+        { !!data.length &&
+          <Graph data={data} />
+        }
+        {
+          !!selection.length &&
+          <List>
+            Top Ten Lines:
+            {
+              selection.map (({name, value}, i) => <ListItem><b>{i + 1}</b> : <str>{name}</str> : {value}</ListItem>)
+            }
+          </List>
+        }
       </main>
     </div>
   );

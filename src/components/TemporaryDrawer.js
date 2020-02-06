@@ -94,7 +94,7 @@ export default function TemporaryDrawer(props) {
        <TextField value={state.logU} onChange={handleChange} name="logU" id="standard-basic" label="LogU" />
       </FormControl>
       <FormControl className={classes.formControl}>
-      <Button variant="contained" color="primary">
+      <Button onClick={() => {props.updateApp (state)}} variant="contained" color="primary">
         Submit
       </Button>
       </FormControl>
@@ -104,7 +104,7 @@ export default function TemporaryDrawer(props) {
 
   return (
     <div>
-      <IconButton onClick={toggleDrawer(true)}edge="end" className={classes.menuButton} color="inherit" aria-label="menu">
+      <IconButton onClick={toggleDrawer(true)} edge="end" className={classes.menuButton} color="inherit" aria-label="menu">
         <SettingsIcon />
       </IconButton>
       <Drawer anchor="right" open={props.inputOpen} onClose={toggleDrawer(false)}>
