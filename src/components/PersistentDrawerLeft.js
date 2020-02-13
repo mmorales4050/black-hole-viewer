@@ -21,6 +21,8 @@ import MailIcon from '@material-ui/icons/Mail';
 import TemporaryDrawer from './TemporaryDrawer'
 import WelcomePage from './WelcomePage'
 import Papa from 'papaparse';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 const drawerWidth = 240;
 
@@ -96,7 +98,8 @@ export default function PersistentDrawerLeft() {
   const [graphFile, setGraphFile] = useState(null)
   const [selection, setSelection] = useState([]) // Used to display top 50 brightest lines
   const [data, setData] = useState([]) // Data for graph
-
+  const [downloadsOpen, setDownloadsOpen] = useState (false);
+  const [topTenLinesOpen, setTopTenLinesOpen] = useState (false);
 
   const updateApp = (inputState) => {
     let selection = comFile.data.filter((item) => {
@@ -279,11 +282,24 @@ export default function PersistentDrawerLeft() {
         {
           !!selection.length &&
           <List>
-            <h2>Top Ten Lines:</h2>
-            {
+            <h2 onClick={() => setTopTenLinesOpen (!topTenLinesOpen)}>Top Ten Lines {!topTenLinesOpen && <ExpandMoreIcon />} {topTenLinesOpen && <ExpandLessIcon />} </h2>
+            { topTenLinesOpen &&
               selection.map (({name, value}, i) => <ListItem><b>{i + 1}</b> : <str>{name}</str> : {value}</ListItem>)
             }
           </List>
+        }
+        { !!data.length &&
+          <div>
+            <h2 onClick={() => setDownloadsOpen (!downloadsOpen)}>¸Downloads {!downloadsOpen && <ExpandMoreIcon />} {downloadsOpen && <ExpandLessIcon />} </h2>
+            
+            { downloadsOpen &&
+              <>
+                <a href="combinedFile.csv" download>Combined File</a>
+                <br />
+                <a href={graphFile} download>Continuum File</a>
+              </>
+            }
+          </div>
         }
       </main>
     </div>

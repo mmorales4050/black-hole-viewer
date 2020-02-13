@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import CanvasJSReact from './canvasjs.react'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 let CanvasJS = CanvasJSReact.CanvasJS;
 let CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
@@ -9,7 +11,12 @@ export default class Graph extends Component {
       min_x: 1,
       min_y: 1,
       max_x: 1e12,
-      max_y: 1e50
+      max_y: 1e50,
+      selectRangeOpen: false
+    }
+
+    get toggleSelectRangeOpen () {
+      return () => this.setState ({selectRangeOpen: !this.state.selectRangeOpen});
     }
 
     get onChange () {
@@ -58,10 +65,14 @@ export default class Graph extends Component {
       return (
           <div >
             <CanvasJSChart options = {options} />
-            <h2>Select Range:</h2>
-            <label>X: [1e<input className="range-input" name="min_x" onChange={this.onChange} defaultValue={Math.log10 (this.state.min_x)}  /> - 1e<input className="range-input" name="max_x" onChange={this.onChange} defaultValue={Math.log10 (this.state.max_x)}  />]</label>
-            <br/>
-            <label>Y: [1e<input className="range-input" name="min_y" onChange={this.onChange} defaultValue={Math.log10 (this.state.min_y)}  /> - 1e<input className="range-input" name="max_y" onChange={this.onChange} defaultValue={Math.log10 (this.state.max_y)}  />]</label>
+            <h2 onClick={this.toggleSelectRangeOpen}>Select Range {!this.state.selectRangeOpen && <ExpandMoreIcon />} {this.state.selectRangeOpen && <ExpandLessIcon />} </h2>
+            { this.state.selectRangeOpen &&
+              <div>
+                <label>X: [1e<input className="range-input" name="min_x" onChange={this.onChange} defaultValue={Math.log10 (this.state.min_x)}  /> - 1e<input className="range-input" name="max_x" onChange={this.onChange} defaultValue={Math.log10 (this.state.max_x)}  />]</label>
+                <br/>
+                <label>Y: [1e<input className="range-input" name="min_y" onChange={this.onChange} defaultValue={Math.log10 (this.state.min_y)}  /> - 1e<input className="range-input" name="max_y" onChange={this.onChange} defaultValue={Math.log10 (this.state.max_y)}  />]</label>
+              </div>
+            }
           </div>
       )
     }
