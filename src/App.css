@@ -10,3 +10,7 @@ input {
   width:100%!important;
   margin:0px!important;
 }
+
+.range-input {
+  width: 5ch;
+}

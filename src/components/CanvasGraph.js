@@ -5,13 +5,20 @@ let CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 export default class Graph extends Component {
 
+    state = {
+      min_x: 1,
+      min_y: 1,
+      max_x: 1e12,
+      max_y: 1e50
+    }
+
+    get onChange () {
+      return e => this.setState ({[e.target.name]: parseFloat(`1e${e.target.value}`)});
+    }
+
     render() {
-      let range = this.props.data.reduce ((acc, val) => {
-        return {min_x: (val [0] < acc.min_x ? val [0] : acc.min_x), max_x: (val [0] > acc.max_x ? val [0] : acc.max_x), min_y: (val [1] < acc.min_y ? val [1] : acc.min_y), max_y: (val [1] > acc.max_y ? val [1] : acc.max_y)}
-      }, {min_x: Infinity, max_x: -Infinity, min_y : Infinity, max_y: -Infinity});
 
       const options = {
-        animationEnabled: true,
         zoomEnabled: true,
         // title: {
         //   text: "Cont nu / Total"
@@ -21,8 +28,8 @@ export default class Graph extends Component {
           logarithmic: true,
           logarithmBase:  10,
           title:"Cont nu",
-          minimum: range.min_x,
-          maximum: range.max_x,
+          minimum: this.state.min_x,
+          maximum: this.state.max_x,
           crosshair: {
             enabled: true,
             snapToDataPoint: true
@@ -33,8 +40,8 @@ export default class Graph extends Component {
           logarithmic: true,
           logarithmBase:  10,
           title: "Total",
-          minimum: 1,
-          maximum: 1e50,
+          minimum: this.state.min_y,
+          maximum: this.state.max_y,
           crosshair: {
             enabled: true,
             snapToDataPoint: true
@@ -50,7 +57,11 @@ export default class Graph extends Component {
 
       return (
           <div >
-          <CanvasJSChart options = {options} />
+            <CanvasJSChart options = {options} />
+            <h2>Select Range:</h2>
+            <label>X: [1e<input className="range-input" name="min_x" onChange={this.onChange} defaultValue={Math.log10 (this.state.min_x)}  /> - 1e<input className="range-input" name="max_x" onChange={this.onChange} defaultValue={Math.log10 (this.state.max_x)}  />]</label>
+            <br/>
+            <label>Y: [1e<input className="range-input" name="min_y" onChange={this.onChange} defaultValue={Math.log10 (this.state.min_y)}  /> - 1e<input className="range-input" name="max_y" onChange={this.onChange} defaultValue={Math.log10 (this.state.max_y)}  />]</label>
           </div>
       )
     }

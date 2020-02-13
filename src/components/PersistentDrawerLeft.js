@@ -108,7 +108,7 @@ export default function PersistentDrawerLeft() {
     }else {
       selection.sort (line => 0 - Math.abs (line [6] - inputState.logU));
       console.log("Graph updated");
-      let topTen = selection[0].splice (7).map ((item, i) => {return {name: columns [i], value: parseFloat (item).toExponential ()}}).sort ((a, b) => b.value - a.value).splice (0, 10);
+      let topTen = selection[0].splice (20).map ((item, i) => {return {name: columns [i + 13], value: parseFloat (item).toExponential ()}}).sort ((a, b) => b.value - a.value).splice (0, 10);
       // update graph and top 50 brightest lines
       let file = fileName(selection[0])
       setSelection(topTen)
@@ -224,11 +224,6 @@ export default function PersistentDrawerLeft() {
         paper: classes.drawerPaper,
       }}
     >
-      <div className={classes.drawerHeader}>
-        <IconButton onClick={handleDrawerClose}>
-          {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-        </IconButton>
-      </div>
       <Divider />
       <List>
         {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
@@ -260,15 +255,6 @@ export default function PersistentDrawerLeft() {
         })}
       >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" noWrap className={classes.title}>
             JWST Galaxy Spectral Simulator Tool
           </Typography>
@@ -293,7 +279,7 @@ export default function PersistentDrawerLeft() {
         {
           !!selection.length &&
           <List>
-            Top Ten Lines:
+            <h2>Top Ten Lines:</h2>
             {
               selection.map (({name, value}, i) => <ListItem><b>{i + 1}</b> : <str>{name}</str> : {value}</ListItem>)
             }
