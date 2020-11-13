@@ -43,19 +43,23 @@ export default function TemporaryDrawer(props) {
 
   const inputs = [
     {
-      name: "agn",
+      name: 'agn',
+      text: "AGN contribution(%)",
       values: [0,5,10,20,40,60,80,100]
     },
     {
-      name: "z",
+      name: 'z',
+      text: "Z (relative to solar)",
       values: [1, 0.1]
     },
     {
-      name: "n",
+      name: 'n',
+      text: "n (cm^-3)",
       values: [300, 1000]
     },
     {
-      name: "nh",
+      name: 'nh',
+      text: "NH (cm^-2)",
       values: [20,21,22,23]
     }
   ]
@@ -76,7 +80,7 @@ export default function TemporaryDrawer(props) {
 
       {inputs.map((input, index) => (
         <FormControl className={classes.formControl} key={index}>
-        <InputLabel id="demo-simple-select-label">{input.name.toUpperCase()}</InputLabel>
+        <InputLabel id="demo-simple-select-label">{input.text.toUpperCase()}</InputLabel>
         <Select
             labelId="select-label"
             id="select"
@@ -94,7 +98,7 @@ export default function TemporaryDrawer(props) {
        <TextField value={state.logU} onChange={handleChange} name="logU" id="standard-basic" label="LogU" />
       </FormControl>
       <FormControl className={classes.formControl}>
-      <Button variant="contained" color="primary">
+      <Button onClick={() => {props.updateApp (state); toggleDrawer (false)({type:'keydown'})}} variant="contained" color="primary">
         Submit
       </Button>
       </FormControl>
@@ -104,7 +108,7 @@ export default function TemporaryDrawer(props) {
 
   return (
     <div>
-      <IconButton onClick={toggleDrawer(true)}edge="end" className={classes.menuButton} color="inherit" aria-label="menu">
+      <IconButton onClick={toggleDrawer(true)} edge="end" className={classes.menuButton} color="inherit" aria-label="menu">
         <SettingsIcon />
       </IconButton>
       <Drawer anchor="right" open={props.inputOpen} onClose={toggleDrawer(false)}>

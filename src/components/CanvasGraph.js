@@ -1,106 +1,79 @@
 import React, { Component } from 'react'
 import CanvasJSReact from './canvasjs.react'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 let CanvasJS = CanvasJSReact.CanvasJS;
 let CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 export default class Graph extends Component {
+
     state = {
-      data: [],
-      max_x: null,
-      max_y: null,
-      min_x: null,
-      min_y: null
+      min_x: 1,
+      min_y: 1,
+      max_x: 1e12,
+      max_y: 1e50,
+      selectRangeOpen: false
     }
 
-    componentDidMount() {
-      // filter out data that will not be graphed
-      let graph = this.props.graph
-      graph = graph.split(/(\s+)/).filter((value) => {
-        return value.includes("e") && value.length > 6
-      })
-      graph.shift()
-      console.log(graph)
-      // extract data that will be graphed
-      let data_set = []
-      let data_point = {}
-      let counter = 0
-      let nu_counter = 0
-      let total_counter = 6
-      let max_x = 0
-      let min_x = graph[0]
-      let min_y = graph[6]
-      let max_y = 0
-      graph.forEach((value) => {
-        if(counter - nu_counter === 0) {
-          nu_counter += 9
-          data_point.x = Number(value)
-          if(Number(value) > max_x) {
-            max_x = Number(value)
-          }
-          if(Number(value) < min_x) {
-            min_x = Number(value)
-          }
-        }
-        if(counter - total_counter === 0) {
-          total_counter += 9
-          data_point.y = Number(value)
-          data_set.push(data_point)
-          data_point = {}
-          if(Number(value) > max_y) {
-            max_y = Number(value)
-          }
-          if(Number(value) < min_y) {
-            min_y = Number(value)
-          }
-        }
-        counter ++
-      })
-      // console.log(data_set)
-      this.setState({...this.state, data: data_set, max_x: max_x, max_y: max_y, min_x: min_x, min_y: min_y})
+    get toggleSelectRangeOpen () {
+      return () => this.setState ({selectRangeOpen: !this.state.selectRangeOpen});
+    }
+
+    get onChange () {
+      return e => this.setState ({[e.target.name]: parseFloat(`1e${e.target.value}`)});
     }
 
     render() {
+
       const options = {
         zoomEnabled: true,
-			animationEnabled: true,
-          animationEnabled: true,
-          zoomEnabled: true,
-          // title:{
-          //   text: "Cont nu / Total"
-          // },
-          axisX: {
-            logarithmic: true,
-   logarithmBase:  10,
-            title:"Cont nu",
-            minimum: this.state.min_x,
-		        maximum: this.state.max_x,
-            crosshair: {
-              enabled: true,
-              snapToDataPoint: true
-            }
-          },
-          axisY:{
-            logarithmic: true,
-   logarithmBase:  10,
-            title: "Total",
-            minimum: this.state.min_y,
-		        maximum: this.state.max_y,
-            crosshair: {
-              enabled: true,
-              snapToDataPoint: true
-            }
-          },
-          data: [{
-            type: "line",
-            markerSize: 5,
-            toolTipContent: "<b>Cont nu: </b>{x}<br/><b>Total: </b>{y}",
-            dataPoints: this.state.data
-          }]
-        }
-        return (
-            <div >
+        // title: {
+        //   text: "Cont nu / Total"
+        // },
+        axisX: {
+          labelFormatter: e => parseFloat (e.value).toExponential (),
+          logarithmic: true,
+          logarithmBase:  10,
+          title:"Cont nu",
+          minimum: this.state.min_x,
+          maximum: this.state.max_x,
+          crosshair: {
+            enabled: true,
+            snapToDataPoint: true
+          }
+        },
+        axisY:{
+          labelFormatter: e => parseFloat (e.value).toExponential (),
+          logarithmic: true,
+          logarithmBase:  10,
+          title: "Total",
+          minimum: this.state.min_y,
+          maximum: this.state.max_y,
+          crosshair: {
+            enabled: true,
+            snapToDataPoint: true
+          }
+        },
+        data: [{
+          type: "line",
+          markerSize: 1,
+          toolTipContent: "<b>Cont nu: </b>{x}<br/><b>Total: </b>{y}",
+          dataPoints: this.props.data.map (([x, y]) => {return {x, y}})
+        }]
+      }
+
+      return (
+          <div >
             <CanvasJSChart options = {options} />
-            </div>
-        )
+            <h2 onClick={this.toggleSelectRangeOpen}>Select Range {!this.state.selectRangeOpen && <ExpandMoreIcon />} {this.state.selectRangeOpen && <ExpandLessIcon />} </h2>
+            { this.state.selectRangeOpen &&
+              <div>
+                <label>X: [1e<input className="range-input" name="min_x" onChange={this.onChange} defaultValue={Math.log10 (this.state.min_x)}  /> - 1e<input className="range-input" name="max_x" onChange={this.onChange} defaultValue={Math.log10 (this.state.max_x)}  />]</label>
+                <br/>
+                <label>Y: [1e<input className="range-input" name="min_y" onChange={this.onChange} defaultValue={Math.log10 (this.state.min_y)}  /> - 1e<input className="range-input" name="max_y" onChange={this.onChange} defaultValue={Math.log10 (this.state.max_y)}  />]</label>
+              </div>
+            }
+          </div>
+      )
     }
 }
