@@ -74,7 +74,6 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: -drawerWidth,
   },
   contentShift: {
     transition: theme.transitions.create('margin', {
@@ -108,7 +107,7 @@ export default function PersistentDrawerLeft() {
     if(selection.length === 0) {
       // Warn user that input is invalid
       console.log("invalid input")
-    }else {
+    } else {
       selection.sort (line => 0 - Math.abs (line [6] - inputState.logU));
       console.log("Graph updated");
       let topTen = selection[0].splice (20).map ((item, i) => {return {name: columns [i + 13], value: parseFloat (item).toExponential ()}}).sort ((a, b) => b.value - a.value).splice (0, 10);
@@ -132,7 +131,7 @@ export default function PersistentDrawerLeft() {
     }
     file += selection[3] + "_" + selection[1] + "per.con"
     // Set configuration file to state
-    return ("data/" + file)
+    return ("http://jwst-black-hole-viewer-dataset.s3-website-us-east-1.amazonaws.com/data/" + file)
   }
 
   const getData = file => {
@@ -195,7 +194,7 @@ export default function PersistentDrawerLeft() {
   }
 
   useEffect(() => {
-    Papa.parse("combinedFile.csv", {
+    Papa.parse("http://jwst-black-hole-viewer-dataset.s3-website-us-east-1.amazonaws.com/combinedFile.csv", {
       download: true,
       complete: (results) => {
           setComFile(results)
@@ -251,22 +250,9 @@ export default function PersistentDrawerLeft() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-      >
-        <Toolbar>
-          <Typography variant="h6" noWrap className={classes.title}>
-            JWST Galaxy Spectral Simulator Tool
-          </Typography>
-          <TemporaryDrawer
-            updateApp={updateApp}
-            inputOpen={inputOpen} toggleInput={toggleInput}/>
-        </Toolbar>
-      </AppBar>
-      {drawer()}
+      <TemporaryDrawer
+        updateApp={updateApp}
+        inputOpen={inputOpen} toggleInput={toggleInput}/>
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,
@@ -277,24 +263,26 @@ export default function PersistentDrawerLeft() {
           <WelcomePage toggleInput={toggleInput}/>
         }
         { !!data.length &&
-          <Graph data={data} />
+          <Graph data={data} toggleInput={toggleInput} />
         }
         {
           !!selection.length &&
-          <List>
+          <>
             <h2 onClick={() => setTopTenLinesOpen (!topTenLinesOpen)}>Top Ten Lines {!topTenLinesOpen && <ExpandMoreIcon />} {topTenLinesOpen && <ExpandLessIcon />} </h2>
-            { topTenLinesOpen &&
-              selection.map (({name, value}, i) => <ListItem><b>{i + 1}</b> : <str>{name}</str> : {value}</ListItem>)
-            }
-          </List>
+            <List>
+              { topTenLinesOpen &&
+                selection.map (({name, value}, i) => <ListItem><b>{i + 1}</b> : <str>{name}</str> : {value}</ListItem>)
+              }
+            </List>
+          </>
         }
         { !!data.length &&
           <div>
-            <h2 onClick={() => setDownloadsOpen (!downloadsOpen)}>¸Downloads {!downloadsOpen && <ExpandMoreIcon />} {downloadsOpen && <ExpandLessIcon />} </h2>
+            <h2 onClick={() => setDownloadsOpen (!downloadsOpen)}>Downloads {!downloadsOpen && <ExpandMoreIcon />} {downloadsOpen && <ExpandLessIcon />} </h2>
             
             { downloadsOpen &&
               <>
-                <a href="combinedFile.csv" download>Combined File</a>
+                <a href="http://jwst-black-hole-viewer-dataset.s3-website-us-east-1.amazonaws.com/combinedFile.csv" download>Combined File</a>
                 <br />
                 <a href={graphFile} download>Continuum File</a>
               </>
